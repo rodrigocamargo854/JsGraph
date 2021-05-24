@@ -1,6 +1,6 @@
 const msalConfig = {
   auth: {
-    clientId: 'token aqui',
+    clientId: 'a491c229-5988-421e-a11f-41a9febe102d',
     redirectUri: 'http://localhost:8080'
   }
 };

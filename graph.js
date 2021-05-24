@@ -1,4 +1,8 @@
 // Create an authentication provider
+
+var cidadesColetadas = []
+var infoContagio = []
+
 const authProvider = {
   getAccessToken: async () => {
     // Call getToken in auth.js
@@ -7,7 +11,23 @@ const authProvider = {
 };
 
 // Initialize the Graph client
-const graphClient = MicrosoftGraph.Client.initWithMiddleware({authProvider});
+const graphClient = MicrosoftGraph.Client.initWithMiddleware({ authProvider });
+
+// async function returnLocation() {
+//   const options = {
+//       authProvider,
+//   };
+
+//   const client = Client.init(options);
+
+//   let events = await client.api('/me/events')
+//       .header('Prefer','outlook.timezone="Pacific Standard Time"')
+//       .select('subject,body,bodyPreview,organizer,attendees,start,end,location')
+//       .get();
+//   }
+
+
+
 
 async function getUser() {
   return await graphClient
@@ -39,6 +59,38 @@ async function getEvents() {
     // &$select=subject,organizer,start,end
     // &$orderby=start/dateTime
     // &$top=50
+
+    const options = {
+      authProvider,
+    };
+
+    let events = await graphClient.api('/me/events')
+      .header('Prefer', 'outlook.timezone="Pacific Standard Time"')
+      .select('subject,body,bodyPreview,organizer,attendees,start,end,location')
+      .get();
+
+
+    for (let i = 0; i < events.value.length; i++) {
+
+      
+      if (events.value[i].location.address.city != undefined) {
+        let cidad = events.value[i].location.address.city
+        cidadesColetadas.push(cidad)
+        
+
+        covid(cidad)
+        
+        
+        //console.log(respCovid.results[0].city)
+
+       /*  respCovid.results[i].new_confirmed
+        respCovid.results[i].estimated_population
+        respCovid.results[i].last_available_confirmed */
+
+      }
+      
+    }
+
     let response = await graphClient
       .api('/me/calendarview')
       // Set the Prefer=outlook.timezone header so date/times are in
@@ -51,10 +103,12 @@ async function getEvents() {
       // Sort the results by start, earliest first
       .orderby('start/dateTime')
       // Maximum 50 events in response
-      .top(50)
+      .top(10)
       .get();
 
     updatePage(Views.calendar, response.value);
+
+
   } catch (error) {
     updatePage(Views.error, {
       message: 'Error getting events',
@@ -62,6 +116,7 @@ async function getEvents() {
     });
   }
 }
+
 
 async function createNewEvent() {
   const user = JSON.parse(sessionStorage.getItem('graphUser'));
@@ -94,8 +149,7 @@ async function createNewEvent() {
     }
   };
 
-  if (attendees)
-  {
+  if (attendees) {
     const attendeeArray = attendees.split(';');
     newEvent.attendees = [];
 
@@ -111,8 +165,7 @@ async function createNewEvent() {
     }
   }
 
-  if (body)
-  {
+  if (body) {
     newEvent.body = {
       contentType: 'text',
       content: body
@@ -134,3 +187,6 @@ async function createNewEvent() {
     });
   }
 }
+
+
+

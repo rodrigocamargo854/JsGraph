@@ -23,6 +23,29 @@ async function signIn() {
   }
 }
 
+// async function locationteste() {
+
+//   try {
+//     const authResult = await msalClient.loginPopup(msalRequest);
+//     console.log('id_token acquired at: ' + new Date().toString());
+//     // Save the account username, needed for token acquisition
+//     sessionStorage.setItem('msalAccount', authResult.account.username);
+
+//     // Get the user's profile from Graph
+//     localidade = await returnLocation();
+//     // Save the profile in session
+//     sessionStorage.setItem('graphUser', JSON.stringify(localidade));
+//     updatePage(Views.home);
+//     console.log("deu certo dentro try")
+
+//   } catch (error) {
+//     console.log(error);
+//   }
+
+  
+
+// }
+
 function signOut() {
   account = null;
   sessionStorage.removeItem('graphUser');

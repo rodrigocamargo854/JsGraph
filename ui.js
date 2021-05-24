@@ -25,8 +25,8 @@ function showAuthenticatedNav(user, view) {
     var calendarNav = createElement('li', 'nav-item');
 
     var calendarLink = createElement('button',
-      `btn btn-link nav-link${view === Views.calendar ? ' active' : '' }`,
-      'Calendar');
+      `btn btn-link nav-link${view === Views.calendar ? ' active' : ''}`,
+      'Calendário');
     calendarLink.setAttribute('onclick', 'getEvents();');
     calendarNav.appendChild(calendarLink);
 
@@ -80,26 +80,26 @@ function showWelcomeMessage(user) {
   // Create jumbotron
   var jumbotron = createElement('div', 'jumbotron');
 
-  var heading = createElement('h1', null, 'JavaScript SPA Graph Tutorial');
+  var heading = createElement('h1', null, 'Atualização sobre o estado de risco por localização');
   jumbotron.appendChild(heading);
 
   var lead = createElement('p', 'lead',
-    'This sample app shows how to use the Microsoft Graph API to access' +
+    'Atualização sobre o estado de risco por localização' +
     ' a user\'s data from JavaScript.');
   jumbotron.appendChild(lead);
 
   if (user) {
     // Welcome the user by name
-    var welcomeMessage = createElement('h4', null, `Welcome ${user.displayName}!`);
+    var welcomeMessage = createElement('h4', null, `Bem Vindo ${user.displayName}!`);
     jumbotron.appendChild(welcomeMessage);
 
     var callToAction = createElement('p', null,
-      'Use the navigation bar at the top of the page to get started.');
+      'Use a barra de navegação para começar ');
     jumbotron.appendChild(callToAction);
   } else {
     // Show a sign in button in the jumbotron
     var signInButton = createElement('button', 'btn btn-primary btn-large',
-      'Click here to sign in');
+      'Autenticar');
     signInButton.setAttribute('onclick', 'signIn();')
     jumbotron.appendChild(signInButton);
   }
@@ -114,8 +114,7 @@ function showError(error) {
   var message = createElement('p', 'mb-3', error.message);
   alert.appendChild(message);
 
-  if (error.debug)
-  {
+  if (error.debug) {
     var pre = createElement('pre', 'alert-pre border bg-light p-2');
     alert.appendChild(pre);
 
@@ -147,18 +146,49 @@ function updatePage(view, data) {
       break;
     case Views.calendar:
       showCalendar(data);
+      GrafCovid();
       break;
   }
 }
 
 updatePage(Views.home);
 
+function GrafCovid() {
+  let graf = document.createElement('div');
+  
+  let cidade1 = document.createElement('div');
+  cidade1.id = 'cidade1'
+  cidade1.innerHTML = cidadesColetadas[4] + "  <br> "+ Math.round(arrayGlobal[4])+"% Chance de contágio <br>  ___"
+  graf.appendChild(cidade1)
+
+  let cidade2 = document.createElement('div');
+  cidade2.id = 'cidade2'
+  cidade2.innerHTML = cidadesColetadas[3] + " <br> "+ Math.round(arrayGlobal[3])+"% Chance de contágio <br>  ___"
+  graf.appendChild(cidade2)
+
+  let cidade3 = document.createElement('div');
+  cidade3.id = 'cidade3'
+  cidade3.innerHTML = cidadesColetadas[2] +" <br> "+ Math.round(arrayGlobal[2])+"% Chance de contágio <br>  ___"
+  graf.appendChild(cidade3)
+
+  let cidade4 = document.createElement('div');
+  cidade4.id = 'cidade4'
+  cidade4.innerHTML = cidadesColetadas[1] +" <br> "+ Math.round(arrayGlobal[1])+"% Chance de contágio <br>  ___"
+  graf.appendChild(cidade4)
+
+  let cidade5 = document.createElement('div');
+  cidade5.id = 'cidade5'
+  cidade5.innerHTML = cidadesColetadas[0] +" <br> "+ Math.round(arrayGlobal[0])+"% Chance de contágio <br>  ___"
+  graf.appendChild(cidade5)
+  mainContainer.appendChild(graf);
+}
+
 function showCalendar(events) {
   let div = document.createElement('div');
 
-  div.appendChild(createElement('h1', 'mb-3', 'Calendar'));
+  div.appendChild(createElement('h1', 'mb-3', 'Calendário'));
 
-  let newEventButton = createElement('button', 'btn btn-light btn-sm mb-3', 'New event');
+  let newEventButton = createElement('button', 'btn btn-light btn-lg mb-3', 'Novo Evento');
   newEventButton.setAttribute('onclick', 'showNewEventForm();');
   div.appendChild(newEventButton);
 
@@ -279,6 +309,15 @@ function showNewEventForm() {
   bodyInput.setAttribute('rows', '3');
   bodyGroup.appendChild(bodyInput);
 
+  //------------------------------------------------------------
+
+  let CoronaInput = createElement('textarea', 'form-control');
+  CoronaInput.setAttribute('id', 'ev-corona');
+  CoronaInput.setAttribute('rows', '4');
+  CoronaInput.appendChild(CoronaInput);
+
+  //-------------------------------------------------------------
+
   let createButton = createElement('button', 'btn btn-primary mr-2', 'Create');
   createButton.setAttribute('type', 'button');
   createButton.setAttribute('onclick', 'createNewEvent();');
@@ -291,4 +330,6 @@ function showNewEventForm() {
 
   mainContainer.innerHTML = '';
   mainContainer.appendChild(form);
+
 }
+
